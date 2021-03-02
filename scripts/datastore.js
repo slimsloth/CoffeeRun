@@ -1,21 +1,29 @@
-(function (window) {
+(function(window) {
   'use strict';
+  // Code will go here
   var App = window.App || {};
 
   function DataStore() {
     this.data = {};
   }
 
-  DataStore.prototype.add = function (key, val) {
+  //Add a key and a value to the dataStore
+  DataStore.prototype.add = function(key, val) {
     this.data[key] = val;
   };
-  DataStore.prototype.get = function (key) {
+
+  //Retrieve the data based on the key
+  DataStore.prototype.get = function(key) {
     return this.data[key];
   };
-  DataStore.prototype.getAll = function () {
+
+  //Get all the data
+  DataStore.prototype.getAll = function() {
     return this.data;
   };
-  DataStore.prototype.remove = function (key) {
+
+  //Remove a value based on its key
+  DataStore.prototype.remove = function(key) {
     delete this.data[key];
   };
 
