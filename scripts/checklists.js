@@ -1,79 +1,79 @@
 (function (window) {
-    "use strict";
+  "use strict";
 
-    var App = window.App || {};
-    var $ = window.jQuery;
+  var App = window.App || {};
+  var $ = window.jQuery;
 
-    function CheckList(selector) {
-        if (!selector) {
-            throw new Error("No Selector provided");
-        }
-
-        this.$element = $(selector);
-        if (this.$element.length === 0) {
-            throw new Error("Could not find element selector " + selector);
-        }
+  function CheckList(selector) {
+    if (!selector) {
+      throw new Error("No Selector provided");
     }
 
-    function Row(coffeeOrder) {
-        var $div = $("<div></div>", {
-            "data-coffee-order": "checkbox",
-            class: "checkbox",
-        });
+    this.$element = $(selector);
+    if (this.$element.length === 0) {
+      throw new Error("Could not find element selector " + selector);
+    }
+  }
 
-        var $label = $("<label></label>");
+  function Row(coffeeOrder) {
+    var $div = $("<div></div>", {
+      "data-coffee-order": "checkbox",
+      class: "checkbox",
+    });
 
-        var $checkbox = $("<input></input>", {
-            type: "checkbox",
-            value: coffeeOrder.emailAddress,
-        });
+    var $label = $("<label></label>");
 
-        var description = coffeeOrder.size + " ";
-        if (coffeeOrder.flavor) {
-            description += coffeeOrder.flavor + " ";
-        }
+    var $checkbox = $("<input></input>", {
+      type: "checkbox",
+      value: coffeeOrder.emailAddress,
+    });
 
-        description += coffeeOrder.coffee + ", ";
-        description += " (" + coffeeOrder.emailAddress + ") ";
-        description += " [" + coffeeOrder.strength + "x] ";
-
-        $label.append($checkbox);
-        $label.append(description);
-        $div.append($label);
-
-        this.$element = $div;
+    var description = coffeeOrder.size + " ";
+    if (coffeeOrder.flavor) {
+      description += coffeeOrder.flavor + " ";
     }
 
-    CheckList.prototype.addRow = function (coffeeOrder) {
-        // Remove any existing rows that match the email address
-        this.removeRow(coffeeOrder.emailAddress);
+    description += coffeeOrder.coffee + ", ";
+    description += " (" + coffeeOrder.emailAddress + ") ";
+    description += " [" + coffeeOrder.strength + "x] ";
 
-        // Create a new instance of a row, using the coffee order info
-        var rowElement = new Row(coffeeOrder);
+    $label.append($checkbox);
+    $label.append(description);
+    $div.append($label);
 
-        // Add the new row instance's $element property to the checklist
-        this.$element.append(rowElement.$element);
-    };
+    this.$element = $div;
+  }
 
-    CheckList.prototype.removeRow = function (email) {
-        this.$element
-            .find('[value="' + email + '"]')
-            .closest('[data-coffee-order="checkbox"]')
-            .remove();
-    };
+  CheckList.prototype.addRow = function (coffeeOrder) {
+    // Remove any existing rows that match the email address
+    this.removeRow(coffeeOrder.emailAddress);
 
-    CheckList.prototype.addClickHandler = function (fn) {
-        this.$element.on(
-            "click",
-            "input",
-            function (event) {
-                var email = event.target.value;
-                this.removeRow(email);
-                fn(email);
-            }.bind(this)
-        );
-    };
+    // Create a new instance of a row, using the coffee order info
+    var rowElement = new Row(coffeeOrder);
 
-    App.CheckList = CheckList;
-    window.App = App;
+    // Add the new row instance's $element property to the checklist
+    this.$element.append(rowElement.$element);
+  };
+
+  CheckList.prototype.removeRow = function (email) {
+    this.$element
+      .find('[value="' + email + '"]')
+      .closest('[data-coffee-order="checkbox"]')
+      .remove();
+  };
+
+  CheckList.prototype.addClickHandler = function (fn) {
+    this.$element.on(
+      "click",
+      "input",
+      function (event) {
+        var email = event.target.value;
+        this.removeRow(email);
+        fn(email);
+      }.bind(this)
+    );
+  };
+
+  App.CheckList = CheckList;
+  window.App = App;
 })(window);
